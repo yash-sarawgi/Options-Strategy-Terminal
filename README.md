@@ -1,50 +1,58 @@
-# OptionsDesk Pro v2 — Real-Data Options Analytics Platform
+# OptionsDesk — Options Strategies & Hedging Analytics Platform
 
 A professional-grade options analytics platform with a **FastAPI Python backend** and a full-featured browser frontend. All analytics are driven by real market data — no theoretical assumptions, no constant IV, no synthetic chains.
 
 ---
 
+## ⚠️ Project Status
+This project is currently under development.
+
+Some features may still be incomplete and bugs or unexpected behavior may occur.
+
+Contributions, suggestions, and improvements are welcome.
+
+---
 ## System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    BROWSER FRONTEND                      │
+│                    BROWSER FRONTEND                     │
 │  index.html — Vanilla JS, Chart.js, Lightweight Charts  │
 │                                                         │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  │
-│  │  Chain   │ │Strategy  │ │ Greeks   │ │Volatility│  │
-│  │  Panel   │ │ Builder  │ │ & Hedge  │ │ Surface  │  │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘  │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐    │
+│  │  Chain   │ │Strategy  │ │ Greeks   │ │Volatility│    │
+│  │  Panel   │ │ Builder  │ │ & Hedge  │ │ Surface  │    │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘    │
 │                                                         │
 │  Data Layer: REST API + WebSocket (live price stream)   │
 │  Fallback:   Yahoo Finance direct (no backend needed)   │
 └─────────────────┬───────────────────────────────────────┘
                   │ HTTP + WS
 ┌─────────────────▼───────────────────────────────────────┐
-│               FASTAPI BACKEND  (:8000)                   │
+│               FASTAPI BACKEND  (:8000)                  │
 │                                                         │
 │  main.py         — Routes, WebSocket, Strategy Engine   │
 │  market_data.py  — Data Layer, IV Solver, Vol Surface   │
 │                                                         │
-│  ┌─────────────────────────────────────────────────┐   │
-│  │            MarketDataService                     │   │
-│  │  Priority: Alpaca (real-time) → Yahoo Finance   │   │
-│  │                                                 │   │
-│  │  AlpacaDataLayer     YahooDataLayer             │   │
-│  │  ├─ latest_quote     ├─ quote (metadata)        │   │
-│  │  ├─ latest_trade     ├─ expiries (real dates)   │   │
-│  │  └─ bars (OHLCV)     ├─ option_chain            │   │
-│  │                      └─ history (OHLCV)         │   │
-│  └─────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │            MarketDataService                    │    │
+│  │  Priority: Alpaca (real-time) → Yahoo Finance   │    │
+│  │                                                 │    │
+│  │  AlpacaDataLayer     YahooDataLayer             │    │ 
+│  │  ├─ latest_quote     ├─ quote (metadata)        │    │
+│  │  ├─ latest_trade     ├─ expiries (real dates)   │    │
+│  │  └─ bars (OHLCV)     ├─ option_chain            │    │
+│  │                      └─ history (OHLCV)         │    │
+│  └─────────────────────────────────────────────────┘    │
 │                                                         │
-│  VolatilitySurface — RBF interpolation (strike × DTE)  │
+│  VolatilitySurface — RBF interpolation (strike × DTE)   │
 │  IV Solver         — Newton-Raphson + Brent fallback    │
 │  BS Greeks Engine  — Per-contract, real IV inputs       │
 │  In-memory Cache   — TTL-based (swap for Redis)         │
 └─────────────────────────────────────────────────────────┘
                   │
 ┌─────────────────▼───────────────────────────────────────┐
-│              DATA PROVIDERS (Free)                       │
+│              DATA PROVIDERS (Free)                      │
 │                                                         │
 │  Yahoo Finance  — Quotes, options chains, OHLCV history │
 │  Alpaca Markets — Real-time equity quotes & bars        │
