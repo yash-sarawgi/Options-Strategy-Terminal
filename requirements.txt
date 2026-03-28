@@ -1,0 +1,19 @@
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+yfinance>=0.2.40
+httpx>=0.27.0
+numpy>=1.26.0
+scipy>=1.12.0
+pydantic>=2.6.0
+python-dotenv>=1.0.0
+websockets>=12.0
+
+# Optional — uncomment if using Redis
+# redis>=5.0.0
+
+# Optional — for PostgreSQL storage
+# asyncpg>=0.29.0
+# sqlalchemy[asyncio]>=2.0.0
+
+# Optional — for advanced vol surface
+# statsmodels>=0.14.0
